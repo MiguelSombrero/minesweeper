@@ -8,19 +8,25 @@ const SidePanel = ({
   handleCreateHardBoard
 
 }) =>
-  <Nav className='flex-column'>
-    <Button
-      text='Easy 9x9'
-      onClick={handleCreateEasyBoard}
-    />
-    <Button
-      text='Medium 16x16'
-      onClick={handleCreateMediumBoard}
-    />
-    <Button
-      text='Hard 30x16'
-      onClick={handleCreateHardBoard}
-    />
+  <Nav justify className='justify-content-center flex-column'>
+    <Nav.Item>
+      <Button
+        text='Easy 9x9'
+        onClick={handleCreateEasyBoard}
+      />
+    </Nav.Item>
+    <Nav.Item>
+      <Button
+        text='Medium 16x16'
+        onClick={handleCreateMediumBoard}
+      />
+    </Nav.Item>
+    <Nav.Item>
+      <Button
+        text='Hard 30x16'
+        onClick={handleCreateHardBoard}
+      />
+    </Nav.Item>
   </Nav>
 
 export default SidePanel

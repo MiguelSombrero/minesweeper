@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { FaFlag, FaBomb } from 'react-icons/fa'
 
-const Tile = ({ value }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isFlagged, setIsFlagged] = useState(false)
+const Tile = ({ tile, open, toggleFlag, handleGameOver }) => {
 
   const setColor = () => {
-    switch(value) {
+    switch(tile.value) {
     case 0:
       return 'whitesmoke'
     case 1:
@@ -23,47 +21,38 @@ const Tile = ({ value }) => {
   }
 
   const closedStyle = {
-    border: '1px solid lightgrey',
-    backgroundColor: 'grey',
-    color: setColor,
-    height: '25px',
-    width: '100%',
-    clear: 'both'
+    color: setColor()
   }
 
   const openStyle = {
-    border: '1px solid lightgrey',
     backgroundColor: 'whitesmoke',
-    text: 'muted',
-    color: setColor(),
-    height: '25px',
-    width: '100%',
-    clear: 'both'
+    color: setColor()
   }
 
-  const handleIsOpen = () => setIsOpen(true)
-  const handleToggleFlagged = () => setIsFlagged(!isFlagged)
+  const handleOpen = () => open()
 
-  const handleMouseClick = (event) => {
-    switch (event.button) {
-    case 0:
-      handleIsOpen()
-      break
-    case 2:
-      handleToggleFlagged()
-      break
-    default:
-      console.log(`unknown button pressed ${event.button}`)
+  const handleFlag = (event) => {
+    event.preventDefault()
+
+    if (!tile.isOpen) {
+      toggleFlag()
     }
   }
 
-  if (isFlagged) {
+  if (tile.isFlagged) {
     return (
-      <FaFlag style={{ color: 'red' }} />
+      <div
+        className='tile'
+        onContextMenu={(e) => handleFlag(e)}
+      >
+        <FaFlag style={{ color: 'red', backgroundColor: 'grey' }} />
+      </div>
     )
   }
 
-  if (isOpen && value === 'M') {
+  if (tile.isOpen && tile.isMine) {
+    handleGameOver()
+
     return (
       <FaBomb />
     )
@@ -71,11 +60,13 @@ const Tile = ({ value }) => {
 
   return (
     <div
-      style={isOpen ? openStyle : closedStyle}
-      onClick={handleMouseClick}
+      className='tile'
+      style={tile.isOpen ? openStyle : closedStyle}
+      onClick={handleOpen}
+      onContextMenu={(e) => handleFlag(e)}
     >
-      {isOpen
-        ? value
+      {tile.isOpen && tile.value !== 0
+        ? tile.value
         : ''
       }
     </div>
