@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaFlag, FaBomb } from 'react-icons/fa'
 
-const Tile = ({ tile, open, toggleFlag, handleGameOver }) => {
+const Tile = ({ tile, open, toggleFlag }) => {
 
   const setColor = () => {
     switch(tile.value) {
@@ -29,9 +29,13 @@ const Tile = ({ tile, open, toggleFlag, handleGameOver }) => {
     color: setColor()
   }
 
-  const handleOpen = () => open()
+  const handleOpen = (event) => {
+    console.log(event.button)
+    open()
+  }
 
   const handleFlag = (event) => {
+    console.log(event.button)
     event.preventDefault()
 
     if (!tile.isOpen) {
@@ -51,8 +55,6 @@ const Tile = ({ tile, open, toggleFlag, handleGameOver }) => {
   }
 
   if (tile.isOpen && tile.isMine) {
-    handleGameOver()
-
     return (
       <FaBomb />
     )

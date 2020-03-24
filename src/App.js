@@ -1,40 +1,61 @@
-import React, { useState } from 'react'
-import { Container, Row, Col, Jumbotron } from 'react-bootstrap'
+import React, { useState, useEffect } from 'react'
+import { Container, Row, Col } from 'react-bootstrap'
 import SidePanel from './components/SidePanel'
-import Board from './components/Board'
-import { createBoardOf } from './services/minesweeperService'
+import Game from './components/Game'
+import { createBoardOf } from './utils/arrayUtils'
+import { findAll } from './services/minesweeperService'
 import './App.css'
 
 const App = () => {
-  const [board, setBoard] = useState([[]])
+  const [game, setGame] = useState(null)
+  const [results, setResults] = useState([])
 
-  const handleCreateBoard = (rows, cols, mines) => {
+  useEffect(() => {
+    handleFindResults()
+  }, [])
+
+  const handleFindResults = async () => {
+    try {
+      const res = await findAll()
+      setResults(res._embedded.minesweepers)
+    } catch (exception) {
+      console.log('Ooops!')
+    }
+  }
+
+  const handleCreateGame = (rows, cols, mines) => {
     const newBoard = createBoardOf(rows, cols, mines)
-    setBoard(newBoard)
+
+    const newGame = {
+      board: newBoard,
+      mines,
+      isOver: false,
+      isWon: false
+    }
+
+    setGame(newGame)
+  }
+
+  const handleSetGame = newGame => {
+    setGame(newGame)
   }
 
   return (
     <Container fluid className='text-center'>
-      <Row>
-        <Jumbotron as={Col} fluid>
+      <Row className='banner'>
+        <Col>
           <h1>Mine Sweeper</h1>
-        </Jumbotron>
-      </Row>
-      <Row>
-        <Col xs={12} sm={4}>
-          <SidePanel
-            handleCreateEasyBoard={() => handleCreateBoard(9, 9, 10)}
-            handleCreateMediumBoard={() => handleCreateBoard(16, 16, 40)}
-            handleCreateHardBoard={() => handleCreateBoard(30, 16, 99)}
-          />
-        </Col>
-        <Col xs={12} sm={{ span: 7, offset: 1 }}>
-          <Board
-            board={board}
-            setBoard={setBoard}
-          />
+          <p>Swipe this to right</p>
         </Col>
       </Row>
+      <h2>Select game difficulty</h2>
+      <SidePanel
+        handleCreateGame={(rows, cols, mines) => handleCreateGame(rows, cols, mines)}
+      />
+      <Game
+        game={game}
+        setGame={(g) => handleSetGame(g)}
+      />
     </Container>
   )
 }
