@@ -1,36 +1,47 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import Board from './Board'
+import GameInfoBar from './GameInfoBar'
+import { isWon } from '../utils/arrayUtils'
 
-const Game = ({ game, setGame }) => {
-  const [timer, setTimer] = useState(0)
+const Game = ({ game, setGame, time, setTime }) => {
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(time + 1)
+    }, 1000)
+
+    return () => clearInterval(timer)
+
+  }, [time])
 
   if (!game) {
     return null
   }
 
-  const handleSetGameOver = () => {
-    setGame({ ...game, isOver: true })
-  }
+  console.log(game)
 
-  const handleUpdateBoard = board => {
-    setGame({ ...game, board })
+  const handleIsWon = async () => {
+    try {
+      setGame({ ...game, isWon: true, isOn: false })
+      console.log('voitit!')
 
-    if (isWon()) {
-      setGame({ ...game, isWon: true })
+    } catch (exception) {
+      console.log('Oops!')
     }
   }
 
-  const isWon = () => {
-    const a = game.board.filter(row => !isEmptyArray(
-      row.filter(isClosedNonMinedTile))
-    )
-
-    return isEmptyArray(a)
+  const handleSetGameOver = () => {
+    setGame({ ...game, isOver: true, isOn: false })
   }
 
-  const isEmptyArray = array => array.length === 0
-  const isClosedNonMinedTile = tile => !tile.isOpen && !tile.isMine
+  const handleUpdateBoard = board => {
+    setGame({ ...game, board, isOn: true })
+
+    if (isWon(game)) {
+      handleIsWon()
+    }
+  }
 
   return (
     <>
@@ -44,10 +55,12 @@ const Game = ({ game, setGame }) => {
           }
         </Col>
       </Row>
+      <GameInfoBar
+        time={time}
+        mines={game.mines}
+      />
       <Row>
         <Col md={{ span: 8, offset: 2 }}>
-          <p>mines {game.mines}</p>
-          <p>seconds {timer}</p>
           <Board
             board={game.board}
             setGameOver={handleSetGameOver}

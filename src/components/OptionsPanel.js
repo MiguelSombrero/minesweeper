@@ -2,7 +2,7 @@ import React from 'react'
 import { Nav } from 'react-bootstrap'
 import Button from './Button'
 
-const SidePanel = ({ handleCreateGame }) =>
+const OptionsPanel = ({ handleCreateGame }) =>
   <Nav className='justify-content-center'>
     <Nav.Item>
       <Button
@@ -24,4 +24,4 @@ const SidePanel = ({ handleCreateGame }) =>
     </Nav.Item>
   </Nav>
 
-export default SidePanel
+export default OptionsPanel

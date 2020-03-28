@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
-import SidePanel from './components/SidePanel'
+import OptionsPanel from './components/OptionsPanel'
 import Game from './components/Game'
 import { createBoardOf } from './utils/arrayUtils'
 import { findAll } from './services/minesweeperService'
 import './App.css'
+import BestOfPanel from './components/BestOfPanel'
 
 const App = () => {
   const [game, setGame] = useState(null)
+  const [time, setTime] = useState(0)
   const [results, setResults] = useState([])
 
   useEffect(() => {
@@ -17,7 +19,7 @@ const App = () => {
   const handleFindResults = async () => {
     try {
       const res = await findAll()
-      setResults(res._embedded.minesweepers)
+      setResults(res)
     } catch (exception) {
       console.log('Ooops!')
     }
@@ -30,9 +32,11 @@ const App = () => {
       board: newBoard,
       mines,
       isOver: false,
-      isWon: false
+      isWon: false,
+      isOn: false
     }
 
+    setTime(0)
     setGame(newGame)
   }
 
@@ -48,14 +52,29 @@ const App = () => {
           <p>Swipe this to right</p>
         </Col>
       </Row>
-      <h2>Select game difficulty</h2>
-      <SidePanel
-        handleCreateGame={(rows, cols, mines) => handleCreateGame(rows, cols, mines)}
-      />
-      <Game
-        game={game}
-        setGame={(g) => handleSetGame(g)}
-      />
+      <Row>
+        <Col>
+          <OptionsPanel
+            handleCreateGame={(rows, cols, mines) => handleCreateGame(rows, cols, mines)}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={12} sm={4} >
+          <h3>Best results</h3>
+          <BestOfPanel
+            results={results}
+          />
+        </Col>
+        <Col xs={12} sm={8} >
+          <Game
+            game={game}
+            setGame={(g) => handleSetGame(g)}
+            time={time}
+            setTime={(t) => setTime(t)}
+          />
+        </Col>
+      </Row>
     </Container>
   )
 }

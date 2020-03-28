@@ -99,3 +99,15 @@ const tileIsEmpty = (row, col, board) =>
 
 const indexOutOfRange = (row, col, board) =>
   row < 0 || col < 0 || row > board.length-1 || col > board[0].length-1
+
+
+export const isWon = game => {
+  const a = game.board.filter(row => !isEmptyArray(
+    row.filter(isClosedNonMinedTile))
+  )
+
+  return isEmptyArray(a)
+}
+
+const isEmptyArray = array => array.length === 0
+const isClosedNonMinedTile = tile => !tile.isOpen && !tile.isMine

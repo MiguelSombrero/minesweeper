@@ -30,12 +30,10 @@ const Tile = ({ tile, open, toggleFlag }) => {
   }
 
   const handleOpen = (event) => {
-    console.log(event.button)
     open()
   }
 
   const handleFlag = (event) => {
-    console.log(event.button)
     event.preventDefault()
 
     if (!tile.isOpen) {
