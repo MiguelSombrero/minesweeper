@@ -1,42 +1,22 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import Board from './Board'
 import GameInfoBar from './GameInfoBar'
 import { isWon } from '../utils/arrayUtils'
 
-const Game = ({ game, setGame, time, setTime }) => {
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(time + 1)
-    }, 1000)
-
-    return () => clearInterval(timer)
-
-  }, [time])
-
+const Game = ({ game, setGame, handleIsWon }) => {
   if (!game) {
     return null
   }
 
   console.log(game)
 
-  const handleIsWon = async () => {
-    try {
-      setGame({ ...game, isWon: true, isOn: false })
-      console.log('voitit!')
-
-    } catch (exception) {
-      console.log('Oops!')
-    }
-  }
-
   const handleSetGameOver = () => {
     setGame({ ...game, isOver: true, isOn: false })
   }
 
   const handleUpdateBoard = board => {
-    setGame({ ...game, board, isOn: true })
+    setGame({ ...game, board, isOn: true, startTime: game.startTime === null ? Date.now() : game.startTime })
 
     if (isWon(game)) {
       handleIsWon()
@@ -56,7 +36,7 @@ const Game = ({ game, setGame, time, setTime }) => {
         </Col>
       </Row>
       <GameInfoBar
-        time={time}
+        start={game.startTime}
         mines={game.mines}
       />
       <Row>
