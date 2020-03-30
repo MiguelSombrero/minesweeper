@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, FormControl } from 'react-bootstrap'
 
-const GameInfoBar = ({ start, mines }) => {
+const GameInfoBar = ({ start, mines, handleNicknameChange }) => {
   const [time, setTime] = useState(0)
 
   useEffect(() => {
@@ -9,16 +9,19 @@ const GameInfoBar = ({ start, mines }) => {
     clearInterval(timer)
   }, [time])
 
-  if (!start) {
-    return null
-  }
-
-  console.log(time)
-
   return (
     <Row>
-      <Col md={{ span: 8, offset: 2 }}>
+      <Col>
+        <FormControl
+          className='mb-2 mt-2'
+          placeholder='Your nickname'
+          onChange={handleNicknameChange}
+        />
+      </Col>
+      <Col>
         <p>mines {mines}</p>
+      </Col>
+      <Col>
         <p>seconds {time}</p>
       </Col>
     </Row>

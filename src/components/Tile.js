@@ -60,7 +60,7 @@ const Tile = ({ tile, open, toggleFlag }) => {
 
   return (
     <div
-      className='tile'
+      className='gridItem'
       style={tile.isOpen ? openStyle : closedStyle}
       onClick={handleOpen}
       onContextMenu={(e) => handleFlag(e)}

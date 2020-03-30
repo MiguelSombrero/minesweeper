@@ -4,7 +4,7 @@ import Board from './Board'
 import GameInfoBar from './GameInfoBar'
 import { isWon } from '../utils/arrayUtils'
 
-const Game = ({ game, setGame, handleIsWon }) => {
+const Game = ({ game, setGame, handleIsWon, handleNicknameChange }) => {
   if (!game) {
     return null
   }
@@ -38,9 +38,10 @@ const Game = ({ game, setGame, handleIsWon }) => {
       <GameInfoBar
         start={game.startTime}
         mines={game.mines}
+        handleNicknameChange={handleNicknameChange}
       />
       <Row>
-        <Col md={{ span: 8, offset: 2 }}>
+        <Col>
           <Board
             board={game.board}
             setGameOver={handleSetGameOver}

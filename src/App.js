@@ -5,7 +5,7 @@ import Game from './components/Game'
 import { createBoardOf } from './utils/arrayUtils'
 import service from './services/minesweeperService'
 import './App.css'
-import BestOfPanel from './components/BestOfPanel'
+import SidePanel from './components/SidePanel'
 
 const App = () => {
   const [game, setGame] = useState(null)
@@ -77,29 +77,22 @@ const App = () => {
         </Col>
       </Row>
       <Row>
-        <Col>
-          <OptionsPanel
-            handleCreateGame={(rows, cols, mines, difficulty) => handleCreateGame(rows, cols, mines, difficulty)}
-          />
-        </Col>
-      </Row>
-      <Row>
         <Col xs={12} sm={3} >
-          <FormControl
-            placeholder='Your nickname'
-            onChange={handleNicknameChange}
-          />
-
-          <h3>Best results</h3>
-          <BestOfPanel
+          <SidePanel
             results={results}
           />
         </Col>
         <Col xs={12} sm={9} >
+          <OptionsPanel
+            handleCreateGame={(rows, cols, mines, difficulty) =>
+              handleCreateGame(rows, cols, mines, difficulty)
+            }
+          />
           <Game
             game={game}
             setGame={(g) => handleSetGame(g)}
             handleIsWon={handleIsWon}
+            handleNicknameChange={handleNicknameChange}
           />
         </Col>
       </Row>

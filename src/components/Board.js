@@ -35,19 +35,29 @@ const Board = ({ board, isOver, setGameOver, updateBoard }) => {
     }
   }
 
+  const gridStyle = {
+    display: 'grid',
+    gridTemplateColumns: `repeat(${board[0].length}, 1.5rem)`,
+    gridTemplateRows: `repeat(${board.length}, 1.5rem)`,
+    alignItems: 'center',
+    textAlign: 'center',
+    justifyItems: 'center',
+    justifyContent: 'center'
+  }
+
   return (
-    board.map((row, i) =>
-      <div key={i} className='board' >
-        {row.map((col, j) =>
+    <div style={gridStyle} >
+      {board.map((row, i) =>
+        row.map((col, j) =>
           <Tile
             key={j}
             tile={col}
             open={() => openTile(i, j)}
             toggleFlag={() => toggleFlag(i, j)}
           />
-        )}
-      </div>
-    )
+        )
+      )}
+    </div>
   )
 }
 

@@ -5,22 +5,16 @@
   margin-bottom: 0.5rem;
 }
 
-.board {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 25px);
-  grid-template-rows: repeat(auto-fill, 25px);
-  align-items: center;
-  text-align: center;
-  justify-items: center;
-  margin: auto;
-}
-
-.tile {
+.gridItem {
   border: 1px solid lightgrey;
   background-color: grey;
   height: 25px;
   width: 100%;
   clear: both;
+}
+
+.gridItem:hover {
+  background-color: rgba(128, 128, 128, 0.822);
 }
 
 .button {
