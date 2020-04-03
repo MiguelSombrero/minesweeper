@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Col, FormControl } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import OptionsPanel from './components/OptionsPanel'
 import Game from './components/Game'
 import { createBoardOf } from './utils/arrayUtils'
 import service from './services/minesweeperService'
 import './App.css'
 import SidePanel from './components/SidePanel'
+import GameInfoBar from './components/GameInfoBar'
+import StatusPanel from './components/StatusPanel'
 
 const App = () => {
   const [game, setGame] = useState(null)
   const [nickname, setNickname] = useState('')
+  const [time, setTime] = useState(0)
   const [results, setResults] = useState([])
 
   useEffect(() => {
@@ -26,18 +29,18 @@ const App = () => {
   }
 
   const handleCreateGame = (rows, cols, mines, difficulty) => {
-    const newBoard = createBoardOf(rows, cols, mines)
+    const board = createBoardOf(rows, cols, mines)
 
     const newGame = {
-      board: newBoard,
+      board,
       mines,
       difficulty,
       isOver: false,
       isWon: false,
-      isOn: false,
-      startTime: null
+      isOn: false
     }
 
+    setTime(0)
     setGame(newGame)
   }
 
@@ -48,7 +51,7 @@ const App = () => {
       const result = {
         nickname: nickname === '' ? 'Anonymous' : nickname,
         difficulty: game.difficulty,
-        time: Math.floor((Date.now() - game.startTime) / 1000)
+        time
       }
 
       const savedResult = await service.create(result)
@@ -59,14 +62,9 @@ const App = () => {
     }
   }
 
-
-  const handleSetGame = newGame => {
-    setGame(newGame)
-  }
-
-  const handleNicknameChange = (e) => {
-    setNickname(e.target.value)
-  }
+  const handleSetGame = game => setGame(game)
+  const handleSetTime = time => setTime(time)
+  const handleNicknameChange = event => setNickname(event.target.value)
 
   return (
     <Container fluid className='text-center'>
@@ -88,11 +86,19 @@ const App = () => {
               handleCreateGame(rows, cols, mines, difficulty)
             }
           />
+          <GameInfoBar
+            game={game}
+            time={time}
+            setTime={(time) => handleSetTime(time)}
+            handleNicknameChange={handleNicknameChange}
+          />
+          <StatusPanel
+            game={game}
+          />
           <Game
             game={game}
-            setGame={(g) => handleSetGame(g)}
+            setGame={(game) => handleSetGame(game)}
             handleIsWon={handleIsWon}
-            handleNicknameChange={handleNicknameChange}
           />
         </Col>
       </Row>

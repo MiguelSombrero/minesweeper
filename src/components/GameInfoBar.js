@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Row, Col, FormControl } from 'react-bootstrap'
+import Timer from './Timer'
 
-const GameInfoBar = ({ start, mines, handleNicknameChange }) => {
-  const [time, setTime] = useState(0)
+const GameInfoBar = ({ game, handleNicknameChange, time, setTime }) => {
 
-  useEffect(() => {
-    const timer = setInterval(() => setTime(Math.floor((Date.now() - start) / 1000)))
-    clearInterval(timer)
-  }, [time])
+  const handleShowTimer = () => game && game.isOn
+    ?
+    <Timer
+      time={time}
+      setTime={setTime}
+    />
+    : time
 
   return (
-    <Row>
-      <Col>
+    <Row className='justify-content-center mt-3'>
+      <Col xs={12} sm={4} >
         <FormControl
           className='mb-2 mt-2'
           placeholder='Your nickname'
           onChange={handleNicknameChange}
         />
-      </Col>
-      <Col>
-        <p>mines {mines}</p>
-      </Col>
-      <Col>
-        <p>seconds {time}</p>
+
+        <p className='float-left'>Mines: {game ? game.mines : 0}</p>
+        <p className='float-right'>Seconds: {handleShowTimer()}</p>
+
       </Col>
     </Row>
   )
