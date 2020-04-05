@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import Board from './Board'
-import { isWon } from '../utils/arrayUtils'
+import { isWon } from '../utils/minesweeperUtils'
 
 const Game = ({ game, setGame, handleIsWon }) => {
   if (!game) {

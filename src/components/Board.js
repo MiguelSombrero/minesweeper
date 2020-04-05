@@ -1,6 +1,6 @@
 import React from 'react'
 import Tile from './Tile'
-import { cascadeEmptyTiles } from '../utils/arrayUtils'
+import { cascadeEmptyTiles, isMine, toggleFlag } from '../utils/minesweeperUtils'
 
 const Board = ({ board, isOver, setGameOver, updateBoard }) => {
   if (!board) {
@@ -10,28 +10,20 @@ const Board = ({ board, isOver, setGameOver, updateBoard }) => {
   const openTile = (row, col) => {
     if (!isOver) {
       if (isMine(row, col, board)) {
-        endGame(row, col)
+        board[row][col].isOpen = true
+        setGameOver()
         return
       }
 
-      const newBoard = [...board]
-      cascadeEmptyTiles(row, col, newBoard)
-      updateBoard(newBoard)
+      cascadeEmptyTiles(row, col, board)
+      updateBoard(board)
     }
   }
 
-  const isMine = (row, col, board) => board[row][col].isMine
-
-  const endGame = (row, col) => {
-    board[row][col].isOpen = true
-    setGameOver()
-  }
-
-  const toggleFlag = (row, col) => {
+  const flag = (row, col) => {
     if (!isOver) {
-      const newBoard = [...board]
-      newBoard[row][col].isFlagged = !newBoard[row][col].isFlagged
-      updateBoard(newBoard)
+      toggleFlag(row, col, board)
+      updateBoard(board)
     }
   }
 
@@ -53,7 +45,7 @@ const Board = ({ board, isOver, setGameOver, updateBoard }) => {
             key={j}
             tile={col}
             open={() => openTile(i, j)}
-            toggleFlag={() => toggleFlag(i, j)}
+            toggleFlag={() => flag(i, j)}
           />
         )
       )}

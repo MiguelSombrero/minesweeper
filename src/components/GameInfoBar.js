@@ -21,8 +21,13 @@ const GameInfoBar = ({ game, handleNicknameChange, time, setTime }) => {
           onChange={handleNicknameChange}
         />
 
-        <p className='float-left'>Mines: {game ? game.mines : 0}</p>
-        <p className='float-right'>Seconds: {handleShowTimer()}</p>
+        <p className='float-left'>
+          Mines: {game ? game.mines : 0}
+        </p>
+
+        <p className='float-right'>
+          Seconds: {handleShowTimer()}
+        </p>
 
       </Col>
     </Row>

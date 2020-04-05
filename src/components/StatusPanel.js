@@ -16,7 +16,7 @@ const StatusPanel = ({ game }) => {
     <Row style={style}>
       <Col>
         {game.isOver &&
-          <h3>You lost!</h3>
+          <h3>Death by mine!</h3>
         }
         {game.isWon &&
           <h3>You Won!</h3>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import OptionsPanel from './components/OptionsPanel'
 import Game from './components/Game'
-import { createBoardOf } from './utils/arrayUtils'
+import { createBoardOf } from './utils/minesweeperUtils'
 import service from './services/minesweeperService'
 import './App.css'
 import SidePanel from './components/SidePanel'
@@ -24,7 +24,7 @@ const App = () => {
       const res = await service.findAll()
       setResults(res)
     } catch (exception) {
-      console.log('Ooops!')
+      console.log(exception)
     }
   }
 
@@ -58,7 +58,7 @@ const App = () => {
       setResults(results.concat(savedResult))
 
     } catch (exception) {
-      console.log('Oops!')
+      console.log(exception)
     }
   }
 
@@ -70,8 +70,7 @@ const App = () => {
     <Container fluid className='text-center'>
       <Row className='banner'>
         <Col>
-          <h1>Mine Sweeper</h1>
-          <p>Swipe this to right</p>
+          <h1>Minesweeper</h1>
         </Col>
       </Row>
       <Row>
