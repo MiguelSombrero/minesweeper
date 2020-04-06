@@ -24,7 +24,7 @@ const Number = ({ tile, handleOpen, handleFlag }) => {
       className='gridItem'
       style={{ color: `${setColor()}`, backgroundColor: tile.isOpen ? 'whitesmoke' : 'grey' }}
       onClick={handleOpen}
-      onContextMenu={(e) => handleFlag(e)}
+      onContextMenu={handleFlag}
     >
       {tile.isOpen && tile.value !== 0
         ? tile.value

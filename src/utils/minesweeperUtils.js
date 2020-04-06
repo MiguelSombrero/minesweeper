@@ -37,50 +37,49 @@ const initializeMines = (rows, cols, mines, board) => {
 const generateIndex = index => Math.floor(Math.random() * index)
 
 const updateAdjacentMinesCount = (i, j, board) => {
-  try {
-    if (notFloor(i) && notFloor(j)) {
-      board[i - 1][j - 1].value += 1
-    }
-    if (notOverFromBottom(i, board) && notOverFromRight(j, board)) {
-      board[i + 1][j + 1].value += 1
-    }
-    if (notFloor(i) && notOverFromRight(j, board)) {
-      board[i - 1][j + 1].value += 1
-    }
-    if (notOverFromBottom(i, board) && notFloor(j)) {
-      board[i + 1][j - 1].value += 1
-    }
+  incrementValueIfNotOutOfBounds(i - 1, j - 1, board)
+  incrementValueIfNotOutOfBounds(i + 1, j + 1, board)
+  incrementValueIfNotOutOfBounds(i - 1, j + 1, board)
+  incrementValueIfNotOutOfBounds(i + 1, j - 1, board)
 
-    if (notFloor(i)) {
-      board[i - 1][j].value += 1
-    }
-    if (notOverFromBottom(i, board)) {
-      board[i + 1][j].value += 1
-    }
-    if (notOverFromRight(j, board)) {
-      board[i][j + 1].value += 1
-    }
-    if (notFloor(j)) {
-      board[i][j - 1].value += 1
-    }
+  incrementValueIfNotOutOfBounds(i - 1, j, board)
+  incrementValueIfNotOutOfBounds(i + 1, j, board)
+  incrementValueIfNotOutOfBounds(i, j - 1, board)
+  incrementValueIfNotOutOfBounds(i, j + 1, board)
+}
 
-  } catch (exception) {
-    console.log(exception)
+const incrementValueIfNotOutOfBounds = (row, col, board) => {
+  if (!indexOutOfRange(row, col, board)) {
+    board[row][col].value += 1
   }
 }
 
-const notFloor = index => index > 0
-const notOverFromBottom = (index, board) => index < board.length-1
-const notOverFromRight = (index, board) => index < board[0].length-1
+export const notEnoughFlags = (i, j, board) => {
+  let flags = 0
+
+  for (let row = i - 1; row <= i + 1; row++) {
+    for (let col = j - 1; col <= j + 1; col++) {
+      if (!indexOutOfRange(row, col, board) && isFlag(row, col, board)) {
+        flags += 1
+      }
+    }
+  }
+
+  if (flags < board[i][j].value) {
+    return true
+  }
+
+  return false
+}
 
 export const cascadeEmptyTiles = (row, col, board) => {
-  if (indexOutOfRange(row, col, board) || board[row][col].isOpen) {
+  if (indexOutOfRange(row, col, board) || board[row][col].isOpen || isMine(row, col, board)) {
     return
   }
 
   board[row][col].isOpen = true
 
-  if (tileIsEmpty(row, col, board)) {
+  if (isEmpty(row, col, board)) {
     cascadeEmptyTiles(row - 1, col - 1, board)
     cascadeEmptyTiles(row + 1, col + 1, board)
     cascadeEmptyTiles(row - 1, col + 1, board)
@@ -93,11 +92,7 @@ export const cascadeEmptyTiles = (row, col, board) => {
   }
 }
 
-const tileIsEmpty = (row, col, board) =>
-  board[row][col].value === 0 &&
-      board[row][col].isMine === false
-
-const indexOutOfRange = (row, col, board) =>
+export const indexOutOfRange = (row, col, board) =>
   row < 0 || col < 0 || row > board.length-1 || col > board[0].length-1
 
 export const isWon = game => {
@@ -110,5 +105,8 @@ export const isWon = game => {
 
 const isEmptyArray = array => array.length === 0
 const isClosedNonMinedTile = tile => !tile.isOpen && !tile.isMine
+const isEmpty = (row, col, board) => board[row][col].value === 0
+
+export const isFlag = (row, col, board) => board[row][col].isFlagged
 export const toggleFlag = (row, col, board) => board[row][col].isFlagged = !board[row][col].isFlagged
 export const isMine = (row, col, board) => board[row][col].isMine

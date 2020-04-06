@@ -2,10 +2,14 @@ import React from 'react'
 import { FaFlag, FaBomb } from 'react-icons/fa'
 import Number from './Number'
 
-const Tile = ({ tile, open, toggleFlag }) => {
+const Tile = ({ tile, open, openAdjacentTiles, toggleFlag }) => {
 
   const handleOpen = (event) => {
-    open()
+    if (tile.isOpen) {
+      openAdjacentTiles()
+    } else {
+      open()
+    }
   }
 
   const handleFlag = (event) => {
@@ -26,7 +30,7 @@ const Tile = ({ tile, open, toggleFlag }) => {
     return (
       <FaFlag
         className='gridItem'
-        onContextMenu={(e) => handleFlag(e)}
+        onContextMenu={handleFlag}
         style={{ color: 'red', backgroundColor: 'grey' }}
       />
     )

@@ -1,6 +1,6 @@
 import React from 'react'
 import Tile from './Tile'
-import { cascadeEmptyTiles, isMine, toggleFlag } from '../utils/minesweeperUtils'
+import { cascadeEmptyTiles, indexOutOfRange, isFlag, isMine, toggleFlag, notEnoughFlags } from '../utils/minesweeperUtils'
 
 const Board = ({ board, isOver, setGameOver, updateBoard }) => {
   if (!board) {
@@ -8,8 +8,8 @@ const Board = ({ board, isOver, setGameOver, updateBoard }) => {
   }
 
   const openTile = (row, col) => {
-    if (!isOver) {
-      if (isMine(row, col, board)) {
+    if (!isOver && !indexOutOfRange(row, col, board)) {
+      if (isMine(row, col, board) && !isFlag(row, col, board)) {
         board[row][col].isOpen = true
         setGameOver()
         return
@@ -18,6 +18,22 @@ const Board = ({ board, isOver, setGameOver, updateBoard }) => {
       cascadeEmptyTiles(row, col, board)
       updateBoard(board)
     }
+  }
+
+  const openAdjacentTiles = (row, col) => {
+    if (notEnoughFlags(row, col, board)) {
+      return
+    }
+
+    openTile(row - 1, col - 1)
+    openTile(row + 1, col + 1)
+    openTile(row + 1, col - 1)
+    openTile(row - 1, col + 1)
+
+    openTile(row - 1, col)
+    openTile(row + 1, col)
+    openTile(row, col - 1)
+    openTile(row, col + 1)
   }
 
   const flag = (row, col) => {
@@ -44,6 +60,7 @@ const Board = ({ board, isOver, setGameOver, updateBoard }) => {
           <Tile
             key={j}
             tile={col}
+            openAdjacentTiles={() => openAdjacentTiles(i, j)}
             open={() => openTile(i, j)}
             toggleFlag={() => flag(i, j)}
           />
