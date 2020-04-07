@@ -96,17 +96,14 @@ export const indexOutOfRange = (row, col, board) =>
   row < 0 || col < 0 || row > board.length-1 || col > board[0].length-1
 
 export const isWon = game => {
-  const a = game.board.filter(row => !isEmptyArray(
-    row.filter(isClosedNonMinedTile))
-  )
-
-  return isEmptyArray(a)
+  return 0 === game.board.reduce(boardReducer, 0)
 }
 
-const isEmptyArray = array => array.length === 0
-const isClosedNonMinedTile = tile => !tile.isOpen && !tile.isMine
-const isEmpty = (row, col, board) => board[row][col].value === 0
+const boardReducer = (sum, currentRow) => sum + currentRow.filter(isClosedNonMinedTile).length
 
+const isClosedNonMinedTile = tile => !tile.isOpen && !tile.isMine
+
+const isEmpty = (row, col, board) => board[row][col].value === 0
 export const isFlag = (row, col, board) => board[row][col].isFlagged
 export const toggleFlag = (row, col, board) => board[row][col].isFlagged = !board[row][col].isFlagged
 export const isMine = (row, col, board) => board[row][col].isMine

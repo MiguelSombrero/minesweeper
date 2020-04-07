@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ListGroup, Card } from 'react-bootstrap'
+import { ListGroup, Card, Badge } from 'react-bootstrap'
 
 const ResultList = ({ listItems, title }) => {
   const [visible, setVisible] = useState(5)
@@ -13,7 +13,7 @@ const ResultList = ({ listItems, title }) => {
   return (
     <Card className='mb-2 mt-2'>
       <Card.Header>
-        <Card.Title>
+        <Card.Title className='text-center'>
           {title}
         </Card.Title>
       </Card.Header>
@@ -24,7 +24,7 @@ const ResultList = ({ listItems, title }) => {
           <ListGroup variant='flush'>
             {itemsToShow.map(item =>
               <ListGroup.Item key={item.id}>
-                {item.nickname} {item.time}
+                {item.nickname} <Badge variant='warning' className='float-right'>{item.time}</Badge>
               </ListGroup.Item>
             )}
 

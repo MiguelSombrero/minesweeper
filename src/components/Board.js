@@ -1,6 +1,7 @@
 import React from 'react'
-import Tile from './Tile'
+import ClosedTile from './ClosedTile'
 import { cascadeEmptyTiles, indexOutOfRange, isFlag, isMine, toggleFlag, notEnoughFlags } from '../utils/minesweeperUtils'
+import OpenTile from './OpenTile'
 
 const Board = ({ board, isOver, setGameOver, updateBoard }) => {
   if (!board) {
@@ -8,8 +9,8 @@ const Board = ({ board, isOver, setGameOver, updateBoard }) => {
   }
 
   const openTile = (row, col) => {
-    if (!isOver && !indexOutOfRange(row, col, board)) {
-      if (isMine(row, col, board) && !isFlag(row, col, board)) {
+    if (!isOver && !indexOutOfRange(row, col, board) && !isFlag(row, col, board)) {
+      if (isMine(row, col, board) ) {
         board[row][col].isOpen = true
         setGameOver()
         return
@@ -36,7 +37,7 @@ const Board = ({ board, isOver, setGameOver, updateBoard }) => {
     openTile(row, col + 1)
   }
 
-  const flag = (row, col) => {
+  const handleFlag = (row, col) => {
     if (!isOver) {
       toggleFlag(row, col, board)
       updateBoard(board)
@@ -56,14 +57,20 @@ const Board = ({ board, isOver, setGameOver, updateBoard }) => {
   return (
     <div style={gridStyle} >
       {board.map((row, i) =>
-        row.map((col, j) =>
-          <Tile
-            key={j}
-            tile={col}
-            openAdjacentTiles={() => openAdjacentTiles(i, j)}
-            open={() => openTile(i, j)}
-            toggleFlag={() => flag(i, j)}
-          />
+        row.map((tile, j) =>
+          tile.isOpen ?
+            <OpenTile
+              key={j}
+              tile={tile}
+              openAdjacentTiles={() => openAdjacentTiles(i, j)}
+            />
+            :
+            <ClosedTile
+              key={j}
+              tile={tile}
+              open={() => openTile(i, j)}
+              toggleFlag={() => handleFlag(i, j)}
+            />
         )
       )}
     </div>

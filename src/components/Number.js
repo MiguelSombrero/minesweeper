@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Number = ({ tile, handleOpen, handleFlag }) => {
+const Number = ({ value, handleClick }) => {
 
   const setColor = () => {
-    switch(tile.value) {
+    switch(value) {
     case 0:
       return 'whitesmoke'
     case 1:
@@ -22,14 +22,10 @@ const Number = ({ tile, handleOpen, handleFlag }) => {
   return (
     <div
       className='gridItem'
-      style={{ color: `${setColor()}`, backgroundColor: tile.isOpen ? 'whitesmoke' : 'grey' }}
-      onClick={handleOpen}
-      onContextMenu={handleFlag}
+      style={{ color: `${setColor()}`, backgroundColor: 'whitesmoke' }}
+      onClick={handleClick}
     >
-      {tile.isOpen && tile.value !== 0
-        ? tile.value
-        : ''
-      }
+      {value === 0 ? '' : value}
     </div>
   )
 }

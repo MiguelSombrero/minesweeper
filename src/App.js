@@ -4,12 +4,14 @@ import OptionsPanel from './components/OptionsPanel'
 import Game from './components/Game'
 import { createBoardOf } from './utils/minesweeperUtils'
 import service from './services/minesweeperService'
-import './App.css'
 import SidePanel from './components/SidePanel'
 import GameInfoBar from './components/GameInfoBar'
-import StatusPanel from './components/StatusPanel'
+import Notification from './components/Notification'
+
+import './App.css'
 
 const App = () => {
+  const [notification, setNotification] = useState({ message: '', isError: false })
   const [game, setGame] = useState(null)
   const [nickname, setNickname] = useState('')
   const [time, setTime] = useState(0)
@@ -19,12 +21,21 @@ const App = () => {
     handleFindResults()
   }, [])
 
+  const handleShowNotification = (message, isError) => {
+    setNotification({ message, isError })
+
+    setTimeout(() => {
+      setNotification({ message: '', isError: false })
+    }, 3000)
+  }
+
   const handleFindResults = async () => {
     try {
       const res = await service.findAll()
       setResults(res)
     } catch (exception) {
       console.log(exception)
+      handleShowNotification('Error when Fetching results, is server up?', true)
     }
   }
 
@@ -44,21 +55,30 @@ const App = () => {
     setGame(newGame)
   }
 
-  const handleIsWon = async () => {
+  const handleIsWon = () => {
+    setGame({ ...game, isWon: true, isOn: false })
+
+    const bestTime = results.map(result => result.time).reduce((a, b) => Math.min(a, b))
+
+    time < bestTime
+      ? saveResult()
+      : handleShowNotification('Your result did not improve', false)
+  }
+
+  const saveResult = async () => {
+    const result = {
+      nickname: nickname === '' ? 'Anonymous' : nickname,
+      difficulty: game.difficulty,
+      time
+    }
+
     try {
-      setGame({ ...game, isWon: true, isOn: false })
-
-      const result = {
-        nickname: nickname === '' ? 'Anonymous' : nickname,
-        difficulty: game.difficulty,
-        time
-      }
-
       const savedResult = await service.create(result)
       setResults(results.concat(savedResult))
 
     } catch (exception) {
       console.log(exception)
+      handleShowNotification('Error when saving result, is server up?', true)
     }
   }
 
@@ -67,10 +87,13 @@ const App = () => {
   const handleNicknameChange = event => setNickname(event.target.value)
 
   return (
-    <Container fluid className='text-center'>
+    <Container fluid>
       <Row className='banner'>
         <Col>
-          <h1>Minesweeper</h1>
+          <h1 className='text-center'>Minesweeper</h1>
+          <Notification
+            notification={notification}
+          />
         </Col>
       </Row>
       <Row>
@@ -91,13 +114,11 @@ const App = () => {
             setTime={(time) => handleSetTime(time)}
             handleNicknameChange={handleNicknameChange}
           />
-          <StatusPanel
-            game={game}
-          />
           <Game
             game={game}
             setGame={(game) => handleSetGame(game)}
             handleIsWon={handleIsWon}
+            handleShowNotification={handleShowNotification}
           />
         </Col>
       </Row>

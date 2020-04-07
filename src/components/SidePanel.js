@@ -3,7 +3,7 @@ import ResultList from './ResultList'
 
 const SidePanel = ({ results }) =>
   <>
-    <h3>Best Results</h3>
+    <h3 className='text-center'>Best Results</h3>
 
     <ResultList
       title='Easy'
