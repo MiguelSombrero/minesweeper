@@ -92,6 +92,30 @@ export const cascadeEmptyTiles = (row, col, board) => {
   }
 }
 
+export const openAdjacentTilesAndIsMine = (row, col, board) => {
+  for (let i = row - 1; i <= row + 1; i++) {
+    for (let j = col - 1; j <= col + 1; j++) {
+      if (openTileAndIsMine(i, j, board)) {
+        return true
+      }
+    }
+  }
+
+  return false
+}
+
+const openTileAndIsMine = (row, col, board) => {
+  if (!indexOutOfRange(row, col, board) && !isFlag(row, col, board)) {
+
+    board[row][col].isOpen = true
+
+    if (isMine(row, col, board)) {
+      return true
+    }
+  }
+  return false
+}
+
 export const indexOutOfRange = (row, col, board) =>
   row < 0 || col < 0 || row > board.length-1 || col > board[0].length-1
 

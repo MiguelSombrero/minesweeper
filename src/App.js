@@ -60,9 +60,9 @@ const App = () => {
 
     const bestTime = results.map(result => result.time).reduce((a, b) => Math.min(a, b))
 
-    time < bestTime
-      ? saveResult()
-      : handleShowNotification('Your result did not improve', false)
+    if (time < bestTime) {
+      saveResult()
+    }
   }
 
   const saveResult = async () => {
@@ -91,11 +91,11 @@ const App = () => {
       <Row className='banner'>
         <Col>
           <h1 className='text-center'>Minesweeper</h1>
-          <Notification
-            notification={notification}
-          />
         </Col>
       </Row>
+      <Notification
+        notification={notification}
+      />
       <Row>
         <Col xs={12} sm={3} >
           <SidePanel

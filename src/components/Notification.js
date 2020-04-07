@@ -8,7 +8,7 @@ const Notification = ({ notification }) => {
 
   return (
     <Row>
-      <Col className='text-center' style={{ color: notification.isError ? 'red' : 'green' }}>
+      <Col className='notification' style={{ backgroundColor: notification.isError ? 'red' : 'green' }}>
         <h2>{notification.message}</h2>
       </Col>
     </Row>

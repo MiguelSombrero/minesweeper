@@ -31,3 +31,12 @@
 .button:hover {
   border: 1px solid rgb(252, 156, 217);
 }
+
+.notification {
+  position:fixed; 
+  top: 0px; 
+  left: 0px; 
+  width: 100%;
+  z-index:9999;
+  text-align: center;
+}
