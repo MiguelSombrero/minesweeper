@@ -24,6 +24,7 @@ const Number = ({ value, handleClick }) => {
       className='gridItem'
       style={{ color: `${setColor()}`, backgroundColor: 'whitesmoke' }}
       onClick={handleClick}
+      onContextMenu={(e) => e.preventDefault()}
     >
       {value === 0 ? '' : value}
     </div>

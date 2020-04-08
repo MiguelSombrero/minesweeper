@@ -9,9 +9,11 @@ import GameInfoBar from './components/GameInfoBar'
 import Notification from './components/Notification'
 
 import './App.css'
+import SaveResultDialog from './components/SaveResultDialog'
 
 const App = () => {
   const [notification, setNotification] = useState({ message: '', isError: false })
+  const [showSaveResultDialog, setShowSaveResultDialog] = useState(false)
   const [game, setGame] = useState(null)
   const [nickname, setNickname] = useState('')
   const [time, setTime] = useState(0)
@@ -55,17 +57,7 @@ const App = () => {
     setGame(newGame)
   }
 
-  const handleIsWon = () => {
-    setGame({ ...game, isWon: true, isOn: false })
-
-    const bestTime = results.map(result => result.time).reduce((a, b) => Math.min(a, b))
-
-    if (time < bestTime) {
-      saveResult()
-    }
-  }
-
-  const saveResult = async () => {
+  const handleSaveResult = async () => {
     const result = {
       nickname: nickname === '' ? 'Anonymous' : nickname,
       difficulty: game.difficulty,
@@ -75,6 +67,7 @@ const App = () => {
     try {
       const savedResult = await service.create(result)
       setResults(results.concat(savedResult))
+      handleCloseSaveResultDialog()
 
     } catch (exception) {
       console.log(exception)
@@ -85,6 +78,8 @@ const App = () => {
   const handleSetGame = game => setGame(game)
   const handleSetTime = time => setTime(time)
   const handleNicknameChange = event => setNickname(event.target.value)
+  const handleCloseSaveResultDialog = () => setShowSaveResultDialog(false)
+  const handleShowSaveResultDialog = () => setShowSaveResultDialog(true)
 
   return (
     <Container fluid>
@@ -95,6 +90,13 @@ const App = () => {
       </Row>
       <Notification
         notification={notification}
+      />
+      <SaveResultDialog
+        show={showSaveResultDialog}
+        handleNicknameChange={handleNicknameChange}
+        handleSaveResult={handleSaveResult}
+        handleClose={handleCloseSaveResultDialog}
+        time={time}
       />
       <Row>
         <Col xs={12} sm={3} >
@@ -112,12 +114,11 @@ const App = () => {
             game={game}
             time={time}
             setTime={(time) => handleSetTime(time)}
-            handleNicknameChange={handleNicknameChange}
           />
           <Game
             game={game}
             setGame={(game) => handleSetGame(game)}
-            handleIsWon={handleIsWon}
+            handleShowSaveResultDialog={handleShowSaveResultDialog}
             handleShowNotification={handleShowNotification}
           />
         </Col>

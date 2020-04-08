@@ -26,12 +26,14 @@ const Board = ({ board, isOver, setGameOver, updateBoard }) => {
       return
     }
 
-    if (openAdjacentTilesAndIsMine(row, col, board)) {
-      setGameOver()
-      return
-    }
+    if (!isOver) {
+      if (openAdjacentTilesAndIsMine(row, col, board)) {
+        setGameOver()
+        return
+      }
 
-    updateBoard(board)
+      updateBoard(board)
+    }
   }
 
   const handleFlag = (row, col) => {

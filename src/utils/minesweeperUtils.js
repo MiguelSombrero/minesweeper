@@ -107,12 +107,13 @@ export const openAdjacentTilesAndIsMine = (row, col, board) => {
 const openTileAndIsMine = (row, col, board) => {
   if (!indexOutOfRange(row, col, board) && !isFlag(row, col, board)) {
 
-    board[row][col].isOpen = true
-
     if (isMine(row, col, board)) {
+      board[row][col].isOpen = true
       return true
     }
   }
+
+  cascadeEmptyTiles(row, col, board)
   return false
 }
 

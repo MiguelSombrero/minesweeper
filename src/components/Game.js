@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap'
 import Board from './Board'
 import { isWon } from '../utils/minesweeperUtils'
 
-const Game = ({ game, setGame, handleIsWon , handleShowNotification }) => {
+const Game = ({ game, setGame, handleShowSaveResultDialog , handleShowNotification }) => {
   if (!game) {
     return null
   }
@@ -17,8 +17,8 @@ const Game = ({ game, setGame, handleIsWon , handleShowNotification }) => {
     setGame({ ...game, board, isOn: true })
 
     if (isWon(game)) {
-      handleShowNotification('You won!', false)
-      handleIsWon()
+      setGame({ ...game, isWon: true, isOn: false })
+      handleShowSaveResultDialog()
     }
   }
 
