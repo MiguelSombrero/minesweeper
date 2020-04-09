@@ -1,46 +1,47 @@
 import React from 'react'
 import ClosedTile from './ClosedTile'
-import { cascadeEmptyTiles, indexOutOfRange, openAdjacentTilesAndIsMine, isFlag, isMine, toggleFlag, notEnoughFlags } from '../utils/minesweeperUtils'
+import { cascadeEmptyTiles, openAdjacentTilesAndIsMine, isFlag, isMine, toggleFlag, notEnoughFlags } from '../utils/minesweeperUtils'
 import OpenTile from './OpenTile'
 
-const Board = ({ board, isOver, setGameOver, updateBoard }) => {
+const Board = ({ board, gameOver, handleSetGameOver, handleUpdateGame }) => {
   if (!board) {
     return null
   }
 
   const openTile = (row, col) => {
-    if (!isOver && !indexOutOfRange(row, col, board) && !isFlag(row, col, board)) {
-      if (isMine(row, col, board) ) {
-        board[row][col].isOpen = true
-        setGameOver()
-        return
-      }
-
-      cascadeEmptyTiles(row, col, board)
-      updateBoard(board)
-    }
-  }
-
-  const openAdjacentTiles = (row, col) => {
-    if (notEnoughFlags(row, col, board)) {
+    if (gameOver() || isFlag(row, col, board)) {
       return
     }
 
-    if (!isOver) {
-      if (openAdjacentTilesAndIsMine(row, col, board)) {
-        setGameOver()
-        return
-      }
-
-      updateBoard(board)
+    if (isMine(row, col, board) ) {
+      board[row][col].isOpen = true
+      handleSetGameOver()
+      return
     }
+
+    cascadeEmptyTiles(row, col, board)
+    handleUpdateGame(board)
+  }
+
+  const openAdjacentTiles = (row, col) => {
+    if (gameOver() || notEnoughFlags(row, col, board)) {
+      return
+    }
+
+    if (openAdjacentTilesAndIsMine(row, col, board)) {
+      handleSetGameOver()
+      return
+    }
+
+    handleUpdateGame(board)
   }
 
   const handleFlag = (row, col) => {
-    if (!isOver) {
-      toggleFlag(row, col, board)
-      updateBoard(board)
+    if (gameOver()) {
+      return
     }
+    toggleFlag(row, col, board)
+    handleUpdateGame(board)
   }
 
   const gridStyle = {

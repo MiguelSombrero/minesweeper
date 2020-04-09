@@ -124,7 +124,8 @@ export const isWon = game => {
   return 0 === game.board.reduce(boardReducer, 0)
 }
 
-const boardReducer = (sum, currentRow) => sum + currentRow.filter(isClosedNonMinedTile).length
+const boardReducer = (sum, currentRow) =>
+  sum + currentRow.filter(isClosedNonMinedTile).length
 
 const isClosedNonMinedTile = tile => !tile.isOpen && !tile.isMine
 

@@ -15,13 +15,13 @@ const GameInfoBar = ({ game, time, setTime }) => {
   return (
     <Row className='justify-content-center mt-3'>
       <Col xs={12} sm={4} >
-        <p className='float-left'>
+        <h6 className='float-left'>
           Mines: {game ? game.mines : 0}
-        </p>
+        </h6>
 
-        <p className='float-right'>
+        <h6 className='float-right'>
           Seconds: {handleShowTimer()}
-        </p>
+        </h6>
 
       </Col>
     </Row>

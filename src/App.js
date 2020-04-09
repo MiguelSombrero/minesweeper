@@ -7,9 +7,9 @@ import service from './services/minesweeperService'
 import SidePanel from './components/SidePanel'
 import GameInfoBar from './components/GameInfoBar'
 import Notification from './components/Notification'
+import SaveResultDialog from './components/SaveResultDialog'
 
 import './App.css'
-import SaveResultDialog from './components/SaveResultDialog'
 
 const App = () => {
   const [notification, setNotification] = useState({ message: '', isError: false })
@@ -99,7 +99,7 @@ const App = () => {
         time={time}
       />
       <Row>
-        <Col xs={12} sm={3} >
+        <Col xs={12} sm={3} style={{ backgroundColor: 'antiquewhite' }}>
           <SidePanel
             results={results}
           />
@@ -117,7 +117,7 @@ const App = () => {
           />
           <Game
             game={game}
-            setGame={(game) => handleSetGame(game)}
+            handleSetGame={handleSetGame}
             handleShowSaveResultDialog={handleShowSaveResultDialog}
             handleShowNotification={handleShowNotification}
           />

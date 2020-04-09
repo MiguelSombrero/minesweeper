@@ -3,7 +3,7 @@ import { Nav } from 'react-bootstrap'
 import Button from './Button'
 
 const OptionsPanel = ({ handleCreateGame }) =>
-  <Nav className='justify-content-center'>
+  <Nav className='justify-content-center mt-4'>
     <Nav.Item>
       <Button
         text='Easy 9x9'

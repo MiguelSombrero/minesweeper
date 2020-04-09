@@ -3,21 +3,23 @@ import { Row, Col } from 'react-bootstrap'
 import Board from './Board'
 import { isWon } from '../utils/minesweeperUtils'
 
-const Game = ({ game, setGame, handleShowSaveResultDialog , handleShowNotification }) => {
+const Game = ({ game, handleSetGame, handleShowSaveResultDialog , handleShowNotification }) => {
   if (!game) {
     return null
   }
 
+  const gameOver = () => game.isOver || game.isWon
+
   const handleSetGameOver = () => {
-    setGame({ ...game, isOver: true, isOn: false })
+    handleSetGame({ ...game, isOver: true, isOn: false })
     handleShowNotification('Death by mine', true)
   }
 
-  const handleUpdateBoard = board => {
-    setGame({ ...game, board, isOn: true })
+  const handleUpdateGame = board => {
+    handleSetGame({ ...game, board, isOn: true })
 
     if (isWon(game)) {
-      setGame({ ...game, isWon: true, isOn: false })
+      handleSetGame({ ...game, isWon: true, isOn: false })
       handleShowSaveResultDialog()
     }
   }
@@ -27,9 +29,9 @@ const Game = ({ game, setGame, handleShowSaveResultDialog , handleShowNotificati
       <Col>
         <Board
           board={game.board}
-          setGameOver={handleSetGameOver}
-          updateBoard={(b) => handleUpdateBoard(b)}
-          isOver={game.isOver}
+          handleSetGameOver={handleSetGameOver}
+          handleUpdateGame={(b) => handleUpdateGame(b)}
+          gameOver={gameOver}
         />
       </Col>
     </Row>
