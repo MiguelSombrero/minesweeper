@@ -20,7 +20,7 @@
 .button {
   background-color: rgb(218, 218, 218);
   color: rgb(54, 51, 124);
-  border: 1px solid rgb(54, 51, 124);
+  border: 1px solid grey;
   min-width: 10rem;
   padding: 10px;
   font-size: 1.3rem;
@@ -28,7 +28,7 @@
 }
   
 .button:hover {
-  border: 1px solid rgb(252, 156, 217);
+  background-color: rgba(218, 218, 218, 0.733);
 }
 
 .notification {

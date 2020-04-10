@@ -58,6 +58,8 @@ const App = () => {
   }
 
   const handleSaveResult = async () => {
+    handleCloseSaveResultDialog()
+
     const result = {
       nickname: nickname === '' ? 'Anonymous' : nickname,
       difficulty: game.difficulty,
@@ -67,7 +69,6 @@ const App = () => {
     try {
       const savedResult = await service.create(result)
       setResults(results.concat(savedResult))
-      handleCloseSaveResultDialog()
 
     } catch (exception) {
       console.log(exception)

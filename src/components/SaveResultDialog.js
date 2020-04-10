@@ -14,7 +14,7 @@ const SaveResultDialog = ({
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header>
         <Modal.Title>
-          Whohoo - you won!
+          You won!
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

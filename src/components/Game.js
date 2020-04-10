@@ -3,7 +3,13 @@ import { Row, Col } from 'react-bootstrap'
 import Board from './Board'
 import { isWon } from '../utils/minesweeperUtils'
 
-const Game = ({ game, handleSetGame, handleShowSaveResultDialog , handleShowNotification }) => {
+const Game = ({
+  game,
+  handleSetGame,
+  handleShowSaveResultDialog,
+  handleShowNotification
+}) => {
+
   if (!game) {
     return null
   }

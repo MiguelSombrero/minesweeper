@@ -54,7 +54,7 @@ const incrementValueIfNotOutOfBounds = (row, col, board) => {
   }
 }
 
-export const notEnoughFlags = (i, j, board) => {
+export const enoughFlags = (i, j, board) => {
   let flags = 0
 
   for (let row = i - 1; row <= i + 1; row++) {
@@ -65,14 +65,14 @@ export const notEnoughFlags = (i, j, board) => {
     }
   }
 
-  if (flags < board[i][j].value) {
+  if (flags === board[i][j].value) {
     return true
   }
 
   return false
 }
 
-export const cascadeEmptyTiles = (row, col, board) => {
+const cascadeEmptyTiles = (row, col, board) => {
   if (indexOutOfRange(row, col, board) || board[row][col].isOpen || isMine(row, col, board)) {
     return
   }
@@ -104,16 +104,17 @@ export const openAdjacentTilesAndIsMine = (row, col, board) => {
   return false
 }
 
-const openTileAndIsMine = (row, col, board) => {
+export const openTileAndIsMine = (row, col, board) => {
   if (!indexOutOfRange(row, col, board) && !isFlag(row, col, board)) {
 
     if (isMine(row, col, board)) {
       board[row][col].isOpen = true
       return true
     }
+
+    cascadeEmptyTiles(row, col, board)
   }
 
-  cascadeEmptyTiles(row, col, board)
   return false
 }
 
@@ -128,8 +129,8 @@ const boardReducer = (sum, currentRow) =>
   sum + currentRow.filter(isClosedNonMinedTile).length
 
 const isClosedNonMinedTile = tile => !tile.isOpen && !tile.isMine
-
 const isEmpty = (row, col, board) => board[row][col].value === 0
-export const isFlag = (row, col, board) => board[row][col].isFlagged
+const isFlag = (row, col, board) => board[row][col].isFlagged
+const isMine = (row, col, board) => board[row][col].isMine
+
 export const toggleFlag = (row, col, board) => board[row][col].isFlagged = !board[row][col].isFlagged
-export const isMine = (row, col, board) => board[row][col].isMine

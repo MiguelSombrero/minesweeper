@@ -1,30 +1,34 @@
 import React from 'react'
 import ClosedTile from './ClosedTile'
-import { cascadeEmptyTiles, openAdjacentTilesAndIsMine, isFlag, isMine, toggleFlag, notEnoughFlags } from '../utils/minesweeperUtils'
+import { openAdjacentTilesAndIsMine, openTileAndIsMine, toggleFlag, enoughFlags } from '../utils/minesweeperUtils'
 import OpenTile from './OpenTile'
 
-const Board = ({ board, gameOver, handleSetGameOver, handleUpdateGame }) => {
+const Board = ({
+  board,
+  gameOver,
+  handleSetGameOver,
+  handleUpdateGame
+}) => {
+
   if (!board) {
     return null
   }
 
   const openTile = (row, col) => {
-    if (gameOver() || isFlag(row, col, board)) {
+    if (gameOver()) {
       return
     }
 
-    if (isMine(row, col, board) ) {
-      board[row][col].isOpen = true
+    if (openTileAndIsMine(row, col, board)) {
       handleSetGameOver()
       return
     }
 
-    cascadeEmptyTiles(row, col, board)
     handleUpdateGame(board)
   }
 
   const openAdjacentTiles = (row, col) => {
-    if (gameOver() || notEnoughFlags(row, col, board)) {
+    if (gameOver() || !enoughFlags(row, col, board)) {
       return
     }
 
