@@ -19,12 +19,11 @@ const Board = ({
       return
     }
 
-    if (openTileAndIsMine(row, col, board)) {
-      handleSetGameOver()
-      return
-    }
+    const newBoard = [...board]
 
-    handleUpdateGame(board)
+    openTileAndIsMine(row, col, newBoard)
+      ? handleSetGameOver()
+      : handleUpdateGame(newBoard)
   }
 
   const openAdjacentTiles = (row, col) => {
@@ -32,20 +31,20 @@ const Board = ({
       return
     }
 
-    if (openAdjacentTilesAndIsMine(row, col, board)) {
-      handleSetGameOver()
-      return
-    }
+    const newBoard = [...board]
 
-    handleUpdateGame(board)
+    openAdjacentTilesAndIsMine(row, col, newBoard)
+      ? handleSetGameOver()
+      : handleUpdateGame(newBoard)
   }
 
   const handleFlag = (row, col) => {
     if (gameOver()) {
       return
     }
-    toggleFlag(row, col, board)
-    handleUpdateGame(board)
+    const newBoard = [...board]
+    toggleFlag(row, col, newBoard)
+    handleUpdateGame(newBoard)
   }
 
   const gridStyle = {
