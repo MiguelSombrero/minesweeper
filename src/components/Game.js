@@ -24,7 +24,7 @@ const Game = ({
   const handleUpdateGame = board => {
     handleSetGame({ ...game, board, isOn: true })
 
-    if (isWon(game)) {
+    if (isWon(board)) {
       handleSetGame({ ...game, isWon: true, isOn: false })
       handleShowSaveResultDialog()
     }

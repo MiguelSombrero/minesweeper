@@ -121,8 +121,8 @@ export const openTileAndIsMine = (row, col, board) => {
 export const indexOutOfRange = (row, col, board) =>
   row < 0 || col < 0 || row > board.length-1 || col > board[0].length-1
 
-export const isWon = game => {
-  return 0 === game.board.reduce(boardReducer, 0)
+export const isWon = board => {
+  return 0 === board.reduce(boardReducer, 0)
 }
 
 const boardReducer = (sum, currentRow) =>
